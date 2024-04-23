@@ -1,12 +1,15 @@
 package com.java.telegrambot.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Setter
+@Getter
+@EqualsAndHashCode
+@ToString
 @Table(name = "notifications")
 public class Notify {
 
@@ -23,4 +26,13 @@ public class Notify {
 
     @Column(name = "date_msg")
     private LocalDateTime dateMsg;
+
+    public Notify() {
+    }
+
+    public Notify(Long chatId, String notifyMsg, LocalDateTime dateMsg) {
+        this.chatId = chatId;
+        this.notifyMsg = notifyMsg;
+        this.dateMsg = dateMsg;
+    }
 }
