@@ -3,14 +3,11 @@ package com.java.telegrambot.listener;
 import com.java.telegrambot.model.Notify;
 import com.java.telegrambot.service.NotificationService;
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.TelegramException;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import jakarta.annotation.PostConstruct;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +19,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.pengrad.telegrambot.response.BaseResponse.*;
 
-@Data
 @Service
+@RequiredArgsConstructor
 public class TelegramBotUpdatesListener implements UpdatesListener {
 
     private final NotificationService notificationService;
