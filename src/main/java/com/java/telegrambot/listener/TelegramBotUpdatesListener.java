@@ -2,6 +2,7 @@ package com.java.telegrambot.listener;
 
 import com.java.telegrambot.model.Notify;
 import com.java.telegrambot.service.NotificationService;
+import com.java.telegrambot.service.NotifyMessageCutter;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
@@ -25,13 +26,14 @@ import java.util.regex.Pattern;
 public class TelegramBotUpdatesListener implements UpdatesListener {
 
     private final NotificationService notificationService;
+    private final NotifyMessageCutter cutter;
 
     private final Logger LOGGER = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
-    private static final Pattern MSG_PATTERN = Pattern.compile("([0-9\\.\\:\\s]{16})(\\s)([\\W+]+)");
+    private static final Pattern MSG_PATTERN = Pattern.compile(
+            "^(?<date>((0[1-9]|[1-3]\\d)\\.(0[1-9]|1(0-2)\\.20[2-9]\\d) (0\\d|[1-2]\\d):(0[1-9]|)[1-5]\\d)) (?<message>.+)$");
+//            "([0-9\\.\\:\\s]{16})(\\s)([\\W+]+)");
 
-    private static final String PREFIX = "/";
-    private static final String DELIMETER = " ";
     private static final String START = "/start";
     private static final String ADD_NOTIFY = "/add";
     private static final String FIND_ALL_MY_NOTIFY = "/all";
@@ -54,41 +56,36 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             String msg = update.message().text();
             Long chatId = update.message().chat().id();
 
+            if (cutter.isCommand(msg)) {
 
+                String cutCommand = cutter.getCommandFromText(msg);
+                String cutText = cutter.getMessageFromText(msg);
+                Matcher matcher = MSG_PATTERN.matcher(cutText);
 
-            if (msg.startsWith(PREFIX)) {
-
-                String command = msg.substring(msg.indexOf(PREFIX), msg.indexOf(DELIMETER));
-                String text = msg.substring(msg.indexOf(DELIMETER)).trim();
-                Matcher matcher = MSG_PATTERN.matcher(text);
-
-                switch (command) {
+                switch (cutCommand) {
                     case START -> {
                         startCommand(chatId);
-                        break;
                     }
+
                     case ADD_NOTIFY -> {
-                        sendMessage(chatId,text);
+                        System.out.println(matcher.matches());
                         if (matcher.matches()) {
-                            String dateNotify = matcher.group(1);
-                            String textNotify = matcher.group(3);
+                            String dateNotify = matcher.group("date");
+                            String textNotify = matcher.group("message");
                             LocalDateTime localDateTime = LocalDateTime
                                     .parse(dateNotify, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
                             Notify toRepo = new Notify(chatId, textNotify, localDateTime);
                             notificationService.addNotifyToRepo(toRepo);
                         }
-                        break;
                     }
                     case FIND_ALL_MY_NOTIFY -> {
                         notificationService.findAllByChatID(chatId);
-                        break;
                     }
 //                case DELETE_NOTIFY -> {
 //                    notificationService.deleteNotifyByID();
 //                }
                     case HELP -> {
                         helpComand(chatId);
-                        break;
                     }
                     default -> unknownCommand(chatId);
                 }
@@ -111,7 +108,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     }
 
     private void startCommand(Long chatId) {
-        String text = """
+        String startText = """
                 Добро пожаловать в бот,
                                 
                 ...
@@ -123,11 +120,11 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 /delete - удаление напоминания (Work in progress)
                 /help - получение справки
                 """;
-        sendMessage(chatId, text);
+        sendMessage(chatId, startText);
     }
 
     private void helpComand(Long chatId) {
-        String text = """
+        String helpText = """
                 Для добавления напоминания (/add) введите сообщение вида:
                 /all dd.mm.yyyy hh.mm Текст напоминания.
                                 
@@ -135,7 +132,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 предварительно воспользуйтесь поиском ваших напоминанй (/all)
                 и удалите его по порядковому номеру.
                 """;
-        sendMessage(chatId, text);
+        sendMessage(chatId, helpText);
     }
 
     private String cutTextMessageFromUpdate(String msg) {
