@@ -27,7 +27,9 @@ public class NotifyMessageCutter {
         String commandPart = "";
         if (text.contains(" ")) {
             int indexOfSpace = text.indexOf(" ");
-            commandPart = text.substring(0, indexOfSpace+1).toLowerCase().trim();
+            commandPart = text.substring(0, indexOfSpace + 1).toLowerCase().trim();
+        } else {
+            commandPart = text;
         }
         System.out.println("Возвращенная команда:" + commandPart);
         return commandPart;
