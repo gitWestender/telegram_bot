@@ -31,8 +31,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final Logger LOGGER = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
     private static final Pattern MSG_PATTERN = Pattern.compile(
-            "^(?<date>((0[1-9]|[1-3]\\d)\\.(0[1-9]|1(0-2)\\.20[2-9]\\d) (0\\d|[1-2]\\d):(0[1-9]|)[1-5]\\d)) (?<message>.+)$");
-//            "([0-9\\.\\:\\s]{16})(\\s)([\\W+]+)");
+            "^(?<date>((0[1-9]|[1-3]\\d)\\.(0[1-9]|1[0-2])\\.20[2-9]\\d (0\\d|[1-2]\\d):(0[1-9]|[1-5]\\d))) (?<message>.+)$");
+//            "([0-9\\.\\:\\s]{16})(\\s)([\\W+].+)");
 
     private static final String START = "/start";
     private static final String ADD_NOTIFY = "/add";
@@ -68,22 +68,23 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     }
 
                     case ADD_NOTIFY -> {
-                        System.out.println(matcher.matches());
-                        if (matcher.matches()) {
+                        if (matcher.find()) {
                             String dateNotify = matcher.group("date");
                             String textNotify = matcher.group("message");
                             LocalDateTime localDateTime = LocalDateTime
                                     .parse(dateNotify, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
                             Notify toRepo = new Notify(chatId, textNotify, localDateTime);
                             notificationService.addNotifyToRepo(toRepo);
+                            sendMessage(chatId, "Напоминание добавлено");
                         }
                     }
                     case FIND_ALL_MY_NOTIFY -> {
                         notificationService.findAllByChatID(chatId);
                     }
-//                case DELETE_NOTIFY -> {
-//                    notificationService.deleteNotifyByID();
-//                }
+                    case DELETE_NOTIFY -> {
+                        notificationService.deleteNotifyByID(Long.parseLong(cutText));
+                        sendMessage(chatId, "Напоминание удалено");
+                    }
                     case HELP -> {
                         helpComand(chatId);
                     }
