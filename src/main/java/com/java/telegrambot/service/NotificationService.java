@@ -20,7 +20,7 @@ public class NotificationService {
         return notificationsRepository.findAllByChatIdOrderById(chatId);
     }
 
-//    public void deleteNotifyByID(Long id) {
-//        notificationsRepository.deleteById(id);
-//    }
+    public void deleteNotifyByID(Long id) {
+        notificationsRepository.deleteById(id);
+    }
 }
