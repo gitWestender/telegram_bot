@@ -63,9 +63,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 Matcher matcher = MSG_PATTERN.matcher(cutText);
 
                 switch (cutCommand) {
-                    case START -> {
-                        startCommand(chatId);
-                    }
+                    case START -> startCommand(chatId);
 
                     case ADD_NOTIFY -> {
                         if (matcher.find()) {
@@ -78,16 +76,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             sendMessage(chatId, "Напоминание добавлено");
                         }
                     }
-                    case FIND_ALL_MY_NOTIFY -> {
-                        notificationService.findAllByChatID(chatId);
-                    }
+                    case FIND_ALL_MY_NOTIFY -> sendMessage(chatId, notificationService.findAllByChatID(chatId));
+
                     case DELETE_NOTIFY -> {
                         notificationService.deleteNotifyByID(Long.parseLong(cutText));
                         sendMessage(chatId, "Напоминание удалено");
                     }
-                    case HELP -> {
-                        helpComand(chatId);
-                    }
+                    case HELP -> helpComand(chatId);
+
                     default -> unknownCommand(chatId);
                 }
             }
@@ -111,14 +107,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private void startCommand(Long chatId) {
         String startText = """
                 Добро пожаловать в бот,
-                                
-                ...
-                Work in progress
-                ...
-                                
+                         
                 /add - добавление напоминания
-                /all - все напоминания (Work in progress)
-                /delete - удаление напоминания (Work in progress)
+                /all - все напоминания
+                /delete - удаление напоминания
                 /help - получение справки
                 """;
         sendMessage(chatId, startText);
@@ -129,14 +121,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 Для добавления напоминания (/add) введите сообщение вида:
                 /all dd.mm.yyyy hh.mm Текст напоминания.
                                 
-                Для удаления напоминания (/delete) 
+                Для удаления напоминания (/delete)
                 предварительно воспользуйтесь поиском ваших напоминанй (/all)
                 и удалите его по порядковому номеру.
                 """;
         sendMessage(chatId, helpText);
-    }
-
-    private String cutTextMessageFromUpdate(String msg) {
-        return null;
     }
 }

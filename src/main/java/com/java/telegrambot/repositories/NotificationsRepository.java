@@ -3,8 +3,8 @@ package com.java.telegrambot.repositories;
 import com.java.telegrambot.model.Notify;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Set;
+import java.util.List;
 
 public interface NotificationsRepository extends JpaRepository<Notify, Long> {
-    Set<Notify> findAllByChatIdOrderById(Long chatId);
+    List<Notify> findAllByChatIdOrderById(Long chatId);
 }
