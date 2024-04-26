@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Notify {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -34,5 +34,12 @@ public class Notify {
         this.chatId = chatId;
         this.notifyMsg = notifyMsg;
         this.dateMsg = dateMsg;
+    }
+
+    public String msgToChat() {
+        return id +
+                ". " + dateMsg +
+                " " + notifyMsg +
+                " " + dateMsg;
     }
 }
