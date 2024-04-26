@@ -119,7 +119,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private void helpComand(Long chatId) {
         String helpText = """
                 Для добавления напоминания (/add) введите сообщение вида:
-                /all dd.mm.yyyy hh.mm Текст напоминания.
+                /all dd.mm.yyyy hh:mm Текст напоминания.
                                 
                 Для удаления напоминания (/delete)
                 предварительно воспользуйтесь поиском ваших напоминанй (/all)
