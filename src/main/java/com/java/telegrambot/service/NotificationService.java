@@ -20,7 +20,7 @@ public class NotificationService {
     public String findAllByChatID(Long chatId) {
         List<Notify> notifies = notificationsRepository.findAllByChatIdOrderById(chatId);
         String sb = notifies.stream()
-                .map(s -> s.toString())
+                .map(s -> s.msgToChat())
                 .collect(Collectors.joining("\n"));
         System.out.println(sb);
         return sb;
