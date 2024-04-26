@@ -5,6 +5,7 @@ import com.java.telegrambot.repositories.NotificationsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,10 @@ public class NotificationService {
                 .collect(Collectors.joining("\n"));
         System.out.println(sb);
         return sb;
+    }
+
+    public List<Notify> findAllByDateMsg(LocalDateTime dateTime) {
+        return notificationsRepository.findAllByDateMsg(dateTime);
     }
 
     public void deleteNotifyByID(Long id) {
