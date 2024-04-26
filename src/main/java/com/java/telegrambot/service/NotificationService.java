@@ -5,7 +5,8 @@ import com.java.telegrambot.repositories.NotificationsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -16,8 +17,13 @@ public class NotificationService {
         notificationsRepository.save(notify);
     }
 
-    public Set<Notify> findAllByChatID(Long chatId) {
-        return notificationsRepository.findAllByChatIdOrderById(chatId);
+    public String findAllByChatID(Long chatId) {
+        List<Notify> notifies = notificationsRepository.findAllByChatIdOrderById(chatId);
+        String sb = notifies.stream()
+                .map(s -> s.toString())
+                .collect(Collectors.joining("\n"));
+        System.out.println(sb);
+        return sb;
     }
 
     public void deleteNotifyByID(Long id) {
