@@ -107,6 +107,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private void startCommand(Long chatId) {
         String startText = """
                 Добро пожаловать в бот,
+                
+                Вы можете добавить мне напоминание (какого вида можно подсмотреть справке)
+                и я пришлю его вам в указаное время!
+                Надеюсь вы ничего не забудете :)
                          
                 /add - добавление напоминания
                 /all - все напоминания
