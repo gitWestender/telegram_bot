@@ -36,9 +36,10 @@ public class Notify {
         this.dateMsg = dateMsg;
     }
 
-    public String msgToChat() {
+  public String msgToChat() {
         return id +
                 ". " + notifyMsg +
                 " " + dateMsg;
     }
+
 }
