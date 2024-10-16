@@ -30,9 +30,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
-    private static final Pattern MSG_PATTERN = Pattern.compile(
-            "^(?<date>((0[1-9]|[1-3]\\d)\\.(0[1-9]|1[0-2])\\.20[2-9]\\d (0\\d|[1-2]\\d):(0[1-9]|[1-5]\\d))) (?<message>.+)$");
-//            "([0-9\\.\\:\\s]{16})(\\s)([\\W+].+)");
+    private static final Pattern MSG_PATTERN = Pattern
+            .compile("^(?<date>((0[1-9]|[1-3]\\d)\\.(0[1-9]|1[0-2])\\.20[2-9]\\d (0\\d|[1-2]\\d):(0[1-9]|[1-5]\\d))) (?<message>.+)$");
 
     private static final String START = "/start";
     private static final String ADD_NOTIFY = "/add";
